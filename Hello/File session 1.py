@@ -1,6 +1,6 @@
 
-def sum(num1, num2):
-    result = num1 + num2
+def sum(num_1, num_2):
+    result = num_1 + num_2
     return result
 
 n1 = int(input("Enter a number:"))
