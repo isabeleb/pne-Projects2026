@@ -9,7 +9,6 @@ total_numC = 0
 total_numG = 0
 total_numT = 0
 
-
 for sequence in lines:
     sequence = sequence.strip()
 
