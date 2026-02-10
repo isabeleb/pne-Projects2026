@@ -1,0 +1,7 @@
+REASON WHY THE CODE IS NOT WORKING:
+We can find the bug in the fact that there is some moment in the code when there is a division by zero.
+This happens in all the prints in which the inputs c and d are equal, and this happens in the second print.
+
+
+The error is located in line 11, where there is a ZeroDivisionError, where T1 equals 0 and we can't divide by zero.
+This will happen everytime values c and d are equal. That's why prints 1,3 and 4 are perfectly computed.
