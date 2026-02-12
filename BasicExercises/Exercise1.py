@@ -11,11 +11,11 @@ def dna_analysis(seq):
     seq_to_lowercase = seq.lower()
     print("-Sequence in lowercase:" , seq_to_lowercase)
 
-    ATC_repetition = seq.count("ATC")
-    print("-ATC count:" , ATC_repetition)
+    atc_count = seq.count("ATC")
+    print("-ATC count:" , atc_count)
 
-    RNA_transcription = seq.replace("T" , "U")
-    print("-RNA sequence:" , RNA_transcription)
+    rna_transcription = seq.replace("T" , "U")
+    print("-RNA sequence:" , rna_transcription)
 
 dna = "ATGCGATCGATCGATCGATCGA"
 
