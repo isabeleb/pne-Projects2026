@@ -2,9 +2,9 @@ from pathlib import Path
 
 FILENAME = "sequences/ADA.txt"
 
-file_contents = Path(FILENAME).read_text()
+ADA_file = Path(FILENAME).read_text()
 
-lines_list = file_contents.split()
+lines_list = ADA_file.split()
 
 body_lines = lines_list[3:]
 

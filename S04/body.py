@@ -2,9 +2,9 @@ from pathlib import Path
 
 FILENAME = "sequences/U5.txt"
 
-file_contents = Path(FILENAME).read_text()
+U5_file = Path(FILENAME).read_text()
 
-lines_list = file_contents.split()
+lines_list = U5_file.split()
 
 body_lines = lines_list[3:]
 
