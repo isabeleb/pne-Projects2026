@@ -12,8 +12,11 @@ for FILE in FILENAMES:
 
 files_dictionary = dict(zip(FILENAMES, filenames))
 
+print("-" * 5 ,"|" , "EXERCISE 3" ,"|", "-" * 5)
+
 for F, f in files_dictionary.items():
-    print("Gene:", F.replace(".txt" , "") , "-> Length:")
+    print("Gene:", F.replace(".txt" , "") , "-> Length:" , seq_len(f))
+
 
 
 
