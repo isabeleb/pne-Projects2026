@@ -70,6 +70,19 @@ def seq_count(seq):
 
 
 def seq_reverse(seq, n):
-    n = 20
+    lines_list = seq.split()
+    header = (lines_list[0] + lines_list[1] + lines_list[2])
+    DNA_seq = "".join(lines_list)
+    DNA_seq_wo_header = DNA_seq.replace(header, "")
+
+    final_DNA_seq = DNA_seq_wo_header.strip()
+
+    fragment = final_DNA_seq[:n]
+
+    reverse_seq = fragment[::-1]
+
+    return fragment, reverse_seq
+
+
 # def seq_complement():
 
