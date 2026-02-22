@@ -17,7 +17,7 @@ print("-" * 5 ,"|" , "EXERCISE 4" ,"|", "-" * 5)
 for F, f in files_dictionary.items():
     count_A, count_C, count_G, count_T = seq_count_base(f)
     print("\n")
-    print("Gene:" , F.replace(".txt" , ""))
+    print("Gene" , F.replace(".txt" , "") + ":")
     print("A:" , count_A)
     print("C:", count_C)
     print("G:", count_G)

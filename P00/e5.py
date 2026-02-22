@@ -15,4 +15,4 @@ files_dictionary = dict(zip(FILENAMES, filenames))
 print("-" * 5 ,"|" , "EXERCISE 5" ,"|", "-" * 5)
 
 for F, f in files_dictionary.items():
-    print("Gene" , F.replace(".txt" , "") , ":" ,seq_count(f) )
+    print("Gene" , F.replace(".txt" , "") + ":" ,seq_count(f) )
