@@ -1,4 +1,3 @@
-import termcolor
 import socket
 
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
