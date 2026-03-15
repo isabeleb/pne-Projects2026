@@ -39,7 +39,6 @@ while True:
 
         if msg.strip() == "PING":
             termcolor.cprint('PING command!', 'green')
-
             response = "OK!\n"
 
             print(response)
