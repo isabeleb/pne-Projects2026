@@ -1,6 +1,7 @@
-import termcolor
 import socket
-from Seq1 import Seq
+from Seq3 import Seq
+import termcolor
+
 
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -38,40 +39,115 @@ while True:
 
 
         if msg.strip() == "PING":
-            termcolor.cprint('PING COMMAND!', 'green')
-            print("OK!")
+            termcolor.cprint('PING command!', 'green')
 
             response = "OK!\n"
 
+            print(response)
+
             cs.send(response.encode())
 
 
-        elif  "GET" in msg:
+        elif "GET" in msg:
            seq_list = ["AGTGTTAGGTTAAACCCTTTAGGCGATGCTAGCTAGATATATATGGGCCCGACGCAGT",
                     "ATTTTCCCGATGCCATAGAGAGGGGTTAAGTAGAAACCCCTTTGATGCTAGGTGTGGT",
                     "TACGTGTGAAACGATCGAAGTGAAATAGATAGAAATAGATTTTAGTTTGTAGGTGGTA",
-                    "GGCCCTAATCGATCGATCAGTTTAGCCCCATGCGGTCTCTAGAAATGCGTGGGATTTA"]
+                    "GGCCCTAATCGATCGATCAGTTTAGCCCCATGCGGTCTCTAGAAATGCGTGGGATTTA",
+                    "ATTAGGCCCCCCATAGATTTAGTAATATAGCTTAGCTTTCGATCGATTCCATAGGGAA"]
 
            n = int(msg.strip().replace("GET" , ""))
 
-           if n != 0:
-               termcolor.cprint('GET', 'green')
+           termcolor.cprint('GET', 'green')
 
-               response = seq_list[n - 1] + "\n"
+           response = seq_list[n] + "\n"
 
-               print(response)
+           print(response)
 
-               cs.send(response.encode())
+           cs.send(response.encode())
 
 
         elif "INFO" in msg:
-            s = Seq()
-            seq = msg.replace("INFO", "").strip()
-            sequence = seq.__str__()
+            termcolor.cprint('INFO', 'green')
 
-            response = s.count_base()
+            sequence = msg.replace("INFO", "").strip()
+
+            s = Seq(sequence)
+
+            seq_length = s.len()
+
+            base_count = s.count_base()
+
+            response1 = f"Sequence: {sequence}" + "\n"
+            print(f"Sequence: {sequence}")
+
+            response2 = f"Total length: {seq_length}" + "\n"
+            print(f"Total length: {seq_length}")
+
+            response3 = base_count + "\n"
+            print(response3)
+
+            cs.send(response1.encode())
+            cs.send(response2.encode())
+            cs.send(response3.encode())
+
+
+        elif "COMP" in msg:
+            termcolor.cprint('COMP', 'green')
+
+            sequence = msg.replace("COMP", "").strip()
+
+            s = Seq(sequence)
+
+            comp_base = s.complement()
+
+            response = comp_base + "\n"
+            print(response)
 
             cs.send(response.encode())
+
+
+        elif "REV" in msg:
+            termcolor.cprint('REV', 'green')
+
+            sequence = msg.replace("REV", "").strip()
+
+            s = Seq(sequence)
+
+            rev_base = s.reverse()
+
+
+            response = rev_base + "\n"
+            print(response)
+
+            cs.send(response.encode())
+
+
+        elif "GENE" in msg:
+            termcolor.cprint('GENE', 'green')
+
+            gene_name = msg.replace("GENE", "").strip()
+
+            valid_genes = ["U5" , "ADA" , "FRAT1" , "FXN" , "RNU6_269P"]
+
+            if gene_name in valid_genes:
+                filename = f"sequences/{gene_name}.txt"
+                s = Seq()
+                gene_seq = s.read_fasta(filename)
+
+                response = str(gene_seq)
+                print(response + "\n")
+
+                cs.send(response.encode())
+
+            else:
+                response = "Invalid Gene Name\n"
+                print(response)
+                cs.send(response.encode())
+
+        else:
+            response = "Sorry, invalid command. Try again"
+            cs.send(response.encode())
+            print(response)
 
 
         cs.close()

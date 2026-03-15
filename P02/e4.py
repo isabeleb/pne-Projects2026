@@ -1,5 +1,5 @@
 from Client0 import Client
-from Seq2 import Seq
+from Client0 import Seq
 
 PRACTICE = 2
 EXERCISE = 4

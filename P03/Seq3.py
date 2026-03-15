@@ -39,30 +39,22 @@ class Seq:
            for base in self.strbases:
                if base in b_count:
                 b_count[base] += 1
-        return  f" A: {b_count['A']},   C: {b_count['C']},   G: {b_count['G']},   T: {b_count['T']}"
 
+        total = len(self.strbases)
 
-    def count(self):
-        b_count = {'A': 0, 'C': 0, 'G': 0, 'T': 0}
-        if self.strbases not in ["NULL", "ERROR"]:
-            for b in self.strbases:
-                if b in b_count:
-                    b_count[b] += 1
-        return b_count
+        percentage = {}
+        for base in b_count:
+            if total > 0:
+                percentage[base] = f"{(b_count[base] / total) * 100:.1f}%"
+            else:
+                percentage[base] = "0.0%"
 
-
-    def reverse(self):
-        base_list = []
-        if self.strbases == "NULL":
-            new_seq = self.strbases
-        elif self.strbases == "ERROR":
-            new_seq = self.strbases
-        else:
-            rev_seq = self.strbases[::-1]
-            for base in rev_seq:
-                base_list.append(base)
-            new_seq = ''.join(base_list)
-        return new_seq
+        return (
+        f"A: {b_count['A']} ({percentage['A']})\n"
+        f"C: {b_count['C']} ({percentage['C']})\n"
+        f"G: {b_count['G']} ({percentage['G']})\n"
+        f"T: {b_count['T']} ({percentage['T']})"
+    )
 
 
     def complement(self):
@@ -83,6 +75,20 @@ class Seq:
         return new_seq
 
 
+    def reverse(self):
+        base_list = []
+        if self.strbases == "NULL":
+            new_seq = self.strbases
+        elif self.strbases == "ERROR":
+            new_seq = self.strbases
+        else:
+            rev_seq = self.strbases[::-1]
+            for base in rev_seq:
+                base_list.append(base)
+            new_seq = ''.join(base_list)
+        return new_seq
+
+
     def read_fasta(self, filename):
         content = Path(filename).read_text()
         content_new = content.split("\n")
@@ -90,3 +96,24 @@ class Seq:
         full_sequence = ("".join(content_new[1:]))
 
         self.strbases = full_sequence
+
+        return full_sequence
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
