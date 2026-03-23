@@ -24,13 +24,14 @@ def process_client(s):
 
     requested_file = req_line_strip[1]
 
+    implemented_resources = ["/info/A", "/info/C", "/info/G", "/info/T"]
+
     if "favicon.ico" in requested_file:
         return
 
-    implemented_resources = ["/info/A", "/info/C" ,"/info/G", "/info/T" ]
-
-    if requested_file in implemented_resources:
+    elif requested_file in implemented_resources:
         file_path = Path("html/"+requested_file+".html")
+
     else:
         file_path = Path("html/error.html")
 
