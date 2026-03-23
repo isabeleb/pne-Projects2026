@@ -1,0 +1,16 @@
+EXERCISE 1
+
+http://127.0.0.1:8080/hello
+-Request line: GET / HTTP/1.1
+-Path: /hello.
+
+http://127.0.0.1:8080/file.html
+-Request line: GET /file.html HTTP/1.1
+-Path: file.html
+
+http://127.0.0.1:8080/hi/there?name=virus&type=corona
+-Request line: Request line: GET /hi/there?name=virus&type=corona HTTP/1.1
+-Path: /hi/there
+
+
+URL to access /dna/u5 resource: http://127.0.0.1:8080/dna/u5
