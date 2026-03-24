@@ -11,6 +11,7 @@ class Client:
     def __str__(self):
         return f"Connection to SERVER at {self.ip} ,PORT: {self.port}"
 
+
     def talk(self, msg):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

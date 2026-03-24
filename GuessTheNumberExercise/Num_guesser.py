@@ -43,17 +43,6 @@ class NumberGuesser:
         return b_count
 
 
-    def reverse(self):
-        base_list = []
-        if self.strbases == "NULL":
-            new_seq = self.strbases
-        elif self.strbases == "ERROR":
-            new_seq = self.strbases
-        else:
-            rev_seq = self.strbases[::-1]
-            for base in rev_seq:
-                base_list.append(base)
-            new_seq = ''.join(base_list)
-        return new_seq
+
 
 

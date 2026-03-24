@@ -1,5 +1,4 @@
 import socket
-from Num_guesser import NumberGuesser
 
 PORT = 8081
 IP = "127.0.0.1"
