@@ -9,26 +9,31 @@ socketserver.TCPServer.allow_reuse_address = True
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
+
     def do_GET(self):
 
         termcolor.cprint(self.requestline, 'green')
 
         request = self.requestline.strip("GET").strip("HTTP/1.1").strip(" ")
 
-        existing_pages = ["/blue.html", "/green.html" , "/pink.html"]
+        req_file = request.strip("/")
 
-        if request == "/" or request == "/index.html":
-            file_path = Path("index.html")
+        try:
+            if request == "/":
+                req_file = "index.html"
+
+                if req_file == "index.html":
+                    file_path = Path("html/" + req_file)
+
+                else:
+                    file_path = Path("html/info/" + req_file)
+
             self.send_response(200)
 
-        elif request in existing_pages:
-            file_path = Path(request.strip("/"))
-            self.send_response(200)
 
-        else:
-            file_path = Path("error.html")
+        except FileNotFoundError:
+            file_path = Path("html/" + "error.html")
             self.send_response(404)
-
 
         contents = file_path.read_text()
 
@@ -36,11 +41,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         self.send_header('Content-Length', len(contents.encode()))
 
         self.end_headers()
-
-
-        self.wfile.write(contents.encode())
-
-        return
 
 
 Handler = TestHandler
