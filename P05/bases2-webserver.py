@@ -15,32 +15,33 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         termcolor.cprint(self.requestline, 'green')
 
         request = self.requestline.strip("GET").strip("HTTP/1.1").strip(" ")
-
         req_file = request.strip("/")
 
         try:
-            if request == "/":
+            if request == "/" or request == "/index.html":
                 req_file = "index.html"
-
                 if req_file == "index.html":
                     file_path = Path("html/" + req_file)
-
                 else:
-                    file_path = Path("html/info/" + req_file)
+                    file_path = Path("html/" + req_file)
+            else:
+                file_path = Path("html/info/" + req_file.strip("info"))
+
+            contents = file_path.read_text()
 
             self.send_response(200)
 
-
-        except FileNotFoundError:
+        except (FileNotFoundError, IsADirectoryError, UnboundLocalError):
             file_path = Path("html/" + "error.html")
+            contents = file_path.read_text()
             self.send_response(404)
-
-        contents = file_path.read_text()
 
         self.send_header('Content-Type', 'text/html')
         self.send_header('Content-Length', len(contents.encode()))
 
         self.end_headers()
+
+        self.wfile.write(contents.encode())
 
 
 Handler = TestHandler
