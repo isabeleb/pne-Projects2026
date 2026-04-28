@@ -1,51 +1,73 @@
-import termcolor
-import json
-from Seq7 import Seq
 import http.client
+import json
+import termcolor
+from Seq7 import Seq
 
-genes = {"FRAT1": "ENSG00000165879",
-         "ADA" : "ENSG00000196839",
-        "FXN" : "ENSG00000165060",
-         "RNU6_269P": "ENSG00000212379",
-         "MIR633" : "ENSG00000207552",
-         "TTTY4C": "ENSG00000228296",
-         "RBMY2YP":"ENSG00000227633",
-         "FGFR3": "ENSG00000068078",
-         "KDR": "ENSG00000128052" ,
-         "ANK2" : "ENSG00000145362" }
+SERVER = 'rest.ensembl.org'
+conn = http.client.HTTPConnection(SERVER)
 
-server = "rest.ensembl.org"
-endpoint = "/sequence/id/"
-for gene in genes:
-    params = f"{genes[gene]}?content-type=application/json"
+gene_list = ['FRAT1', 'ADA', 'FXN', 'RNU6-269P', 'MIR633', 'TTTY4C', 'RBMY2YP', 'FGFR3', 'KDR', 'ANK2']
 
-    url = server + endpoint + params
-    print()
-    print(f"Server: {server}")
-    print(f"URL: {url}")
+for gene in gene_list:
+    endpoint1 = f'/lookup/symbol/homo_sapiens/{gene}'
+    params1 = '?content-type=application/json'
 
-    conn = http.client.HTTPSConnection(server)
-    conn.request("GET", endpoint + params )
-    response = conn.getresponse()
-    res = response.read().decode()
-    data = json.loads(res)
-    print(f"Response received!: {response.status} {response.reason}\n")
-    print(f"{termcolor.colored("Gene", "yellow")}: {gene}")
-    print(f"{termcolor.colored("Description", "yellow")}: {data["desc"]}")
-    seq = Seq(data["seq"])
-    print(f"{termcolor.colored("Total length", "yellow")}: {seq.len()}")
-    bases = []
-    maxi = 0
-    b = None
-    for a in seq.count_base().split(", "):
-        base = (a.split(" : ")[0])
-        if seq.len() != 0:
-            n = int(a.split(" : ")[1])
-            if n > maxi:
-                maxi = n
-                b = base
-            bases.append(f"{termcolor.colored(base, "blue")}: {n} ({str(round(n / seq.len() * 100, 2))}%)")
-        else:
-            bases.append(f"{termcolor.colored(a, "blue")} (0%)")
-    print("\n".join(bases))
-    print(f"{termcolor.colored("Most common base", "yellow")}: {b}")
+    try:
+        conn.request("GET", endpoint1 + params1)
+        response1 = conn.getresponse()
+
+        data1 = json.loads(response1.read().decode())
+        gene_id = data1['id']
+
+        endpoint2 = f'/sequence/id/{gene_id}'
+        params2 = '?content-type=application/json'
+        conn.request("GET", endpoint2 + params2)
+        response2 = conn.getresponse()
+
+        data2 = json.loads(response2.read().decode())
+        gene_seq = data2['seq']
+
+        endpoint3 = f'/sequence/id/{gene_id}'
+        params3 = '?content-type=text/x-fasta;expand_5prime=10;type=genomic'
+        conn.request("GET", endpoint3 + params3)
+        response3 = conn.getresponse()
+
+        data3 = response3.read().decode()
+        gene_description_list = data3.split(' ')
+        gene_description_first_lines = gene_description_list[1].splitlines()
+        gene_description = gene_description_first_lines[0]
+
+        print(f"\nServer: {SERVER}")
+        print(f"URL: {SERVER + endpoint2 + params2}")
+        print(f"Response received!: {response2.status} {response2.reason}\n")
+
+        termcolor.cprint(f'Gene: {gene}', 'yellow')
+        termcolor.cprint(f'Description: {gene_description}', 'yellow')
+
+        sequence = Seq(gene_seq)
+
+        bases_count_dict = sequence.count_base()
+
+        termcolor.cprint(f'Total length: {sequence.len()}', 'yellow')
+
+        for base, count in bases_count_dict.items():
+            termcolor.cprint(f'{base}:', 'blue', end='')
+            print(count)
+
+        mf_base_count = 0
+        most_freq_base = None
+
+        for b, c in bases_count_dict.items():
+            count = int(c)
+            if count > mf_base_count:
+                mf_base_count = count
+                most_freq_base = b
+        termcolor.cprint('Most frequent base:', 'yellow', end='')
+        print(most_freq_base)
+
+    except ConnectionRefusedError:
+        print('ERROR! Cannot connect to the Server')
+        exit()
+
+
+

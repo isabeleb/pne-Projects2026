@@ -21,7 +21,7 @@ for gene in gene_list:
         data = json.loads(response.read().decode())
         gene_id = data['id']
         gene_dict[gene] = gene_id
-        termcolor.cprint(f"{gene}:", "green", end="")
+        termcolor.cprint(f"{gene}:", "yellow", end="")
         print(f" --> {gene_id}")
     else:
         print(f"Gene {gene} not found")

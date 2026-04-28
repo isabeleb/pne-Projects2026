@@ -39,7 +39,7 @@ class Seq:
            for base in self.strbases:
                if base in b_count:
                 b_count[base] += 1
-        return  f" A: {b_count['A']},   C: {b_count['C']},   G: {b_count['G']},   T: {b_count['T']}"
+        return  b_count
 
 
     def count(self):
