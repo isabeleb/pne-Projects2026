@@ -1,6 +1,7 @@
 import http.client
 import json
 import termcolor
+from Seq7 import Seq
 
 SERVER = 'rest.ensembl.org'
 conn = http.client.HTTPConnection(SERVER)
@@ -41,8 +42,6 @@ print(f"Response received!: {response2.status} {response2.reason}\n")
 termcolor.cprint(f'Gene: {gene}', 'green')
 termcolor.cprint(f'Description: {gene_description}', 'green')
 termcolor.cprint(f'Bases: {gene_seq}', 'green')
-
-
 
 
 
