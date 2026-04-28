@@ -14,17 +14,25 @@ print(f"There are {len(gene_list)} genes in the dictionary:\n")
 for gene in gene_list:
     endpoint = f"/lookup/symbol/homo_sapiens/{gene}?content-type=application/json"
 
-    conn.request("GET", endpoint)
-    response = conn.getresponse()
+    try:
+        conn.request("GET", endpoint)
+        response = conn.getresponse()
 
-    if response.status == 200:
-        data = json.loads(response.read().decode())
-        gene_id = data['id']
-        gene_dict[gene] = gene_id
-        termcolor.cprint(f"{gene}:", "yellow", end="")
-        print(f" --> {gene_id}")
-    else:
-        print(f"Gene {gene} not found")
+        if response.status == 200:
+            data = json.loads(response.read().decode())
+            gene_id = data['id']
+            gene_dict[gene] = gene_id
+            termcolor.cprint(f"{gene}:", "yellow", end="")
+            print(f" --> {gene_id}")
+        else:
+            print(f"Gene {gene} not found")
+
+    except ConnectionRefusedError:
+        print('ERROR! Cannot connect to the server')
+        exit()
+
+
+
 
 
 

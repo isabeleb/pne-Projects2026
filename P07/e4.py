@@ -40,20 +40,20 @@ try:
     print(f"URL: {SERVER + endpoint2 + params2}")
     print(f"Response received!: {response2.status} {response2.reason}\n")
 
-    termcolor.cprint('Gene:', 'yellow')
+    termcolor.cprint('Gene: ', 'yellow', end='')
     print(gene)
-    termcolor.cprint('Description:', 'yellow')
+    termcolor.cprint('Description: ', 'yellow', end='')
     print(gene_description)
 
     sequence = Seq(gene_seq)
 
     bases_count_dict = sequence.count_base()
 
-    termcolor.cprint('Total length:', 'yellow')
+    termcolor.cprint('Total length: ', 'yellow', end='')
     print(sequence.len())
 
     for base, count in bases_count_dict.items():
-        termcolor.cprint(f'{base}:', 'blue', end='')
+        termcolor.cprint(f'{base}: ', 'blue', end='')
         print(count)
 
     mf_base_count = 0
@@ -64,7 +64,7 @@ try:
         if count > mf_base_count:
             mf_base_count = count
             most_freq_base = b
-    termcolor.cprint('Most frequent base:', 'yellow', end='')
+    termcolor.cprint('Most frequent base: ', 'yellow', end='')
     print(most_freq_base)
 
 except ConnectionRefusedError:

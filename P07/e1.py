@@ -11,15 +11,21 @@ print(f"Server: {SERVER}")
 print(f"URL: {URL}")
 
 connect = http.client.HTTPConnection(SERVER)
-connect.request("GET", ENDPOINT + PARAMS)
 
-response = connect.getresponse()
-data = json.loads(response.read().decode())
+try:
+    connect.request("GET", ENDPOINT + PARAMS)
+    response = connect.getresponse()
+    data = json.loads(response.read().decode())
 
-print(f"Response received!: {response.status} {response.reason}\n")
+    print(f"Response received!: {response.status} {response.reason}\n")
 
-if data["ping"] == 1:
-    print("PING OK! The database is running|")
+    if data["ping"] == 1:
+        print("PING OK! The database is running|")
+
+except ConnectionRefusedError:
+    print('ERROR! Cannot connect to the server')
+    exit()
+
 
 
 

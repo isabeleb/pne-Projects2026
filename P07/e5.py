@@ -41,17 +41,20 @@ for gene in gene_list:
         print(f"URL: {SERVER + endpoint2 + params2}")
         print(f"Response received!: {response2.status} {response2.reason}\n")
 
-        termcolor.cprint(f'Gene: {gene}', 'yellow')
-        termcolor.cprint(f'Description: {gene_description}', 'yellow')
+        termcolor.cprint('Gene: ', 'yellow', end='')
+        print(gene)
+        termcolor.cprint('Description: ', 'yellow', end='')
+        print(gene_description)
 
         sequence = Seq(gene_seq)
 
         bases_count_dict = sequence.count_base()
 
-        termcolor.cprint(f'Total length: {sequence.len()}', 'yellow')
+        termcolor.cprint('Total length: ', 'yellow', end='')
+        print(sequence.len())
 
         for base, count in bases_count_dict.items():
-            termcolor.cprint(f'{base}:', 'blue', end='')
+            termcolor.cprint(f'{base}: ', 'blue', end='')
             print(count)
 
         mf_base_count = 0
@@ -62,7 +65,7 @@ for gene in gene_list:
             if count > mf_base_count:
                 mf_base_count = count
                 most_freq_base = b
-        termcolor.cprint('Most frequent base:', 'yellow', end='')
+        termcolor.cprint('Most frequent base: ', 'yellow', end='')
         print(most_freq_base)
 
     except ConnectionRefusedError:
