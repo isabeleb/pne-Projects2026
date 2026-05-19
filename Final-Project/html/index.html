@@ -14,17 +14,58 @@
       <br><br>
         <input type="submit" value="Send" />
       </form>
+
     <p>2)Information about the karyotype:</p>
     <form action="/karyotype" method="get">
-      Select the species :  <input type="text" name="species1">
+      Select the species :  <input type="text" name="species">
       <br><br>
         <input type="submit" value="Send"/>
       </form>
+
     <p>3)Chromosome Length</p>
     <form action="/chromosomeLength" method="get">
-      Select the species :  <input type="text" name="species2">
+      Select the species :  <input type="text" name="species">
       <br><br>
-      Select the chromosome : <input type="text" name="chormo">
+      Select the chromosome : <input type="text" name="chromo">
+      <br><br>
+        <input type="submit" value="Send"/>
+      </form>
+
+    <p>4)Id of a human gene</p>
+    <form action="/geneLookup" method="get">
+      Select the gene : <input type="text" name="gene_name">
+      <br><br>
+        <input type="submit" value="Send"/>
+      </form>
+
+    <p>5)Sequence of a human gene</p>
+    <form action="/geneSeq" method="get">
+      Select the gene : <input type="text" name="gene_name">
+      <br><br>
+        <input type="submit" value="Send"/>
+      </form>
+
+    <p>6)Information about a human gene</p>
+    <form action="/geneInfo" method="get">
+      Select the gene : <input type="text" name="gene_name">
+      <br><br>
+        <input type="submit" value="Send"/>
+      </form>
+
+    <p>7)Calculations on a human gene</p>
+    <form action="/geneCalc" method="get">
+      Select the gene : <input type="text" name="gene_name">
+      <br><br>
+        <input type="submit" value="Send"/>
+      </form>
+
+    <p>8)Human genes that overlap a region</p>
+    <form action="/geneList" method="get">
+      Select the gene : <input type="text" name="gene_name">
+      <br><br>
+      Select the start of the region : <input type="text" name="start">
+      <br><br>
+      Select the end of the region : <input type="text" name="end">
       <br><br>
         <input type="submit" value="Send"/>
       </form>
