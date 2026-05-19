@@ -161,9 +161,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 print('ERROR! Cannot connect to the server')
                 exit()
 
+
+
         elif path == "/geneSeq":
             self.send_response(200)
-
             gene = arguments.get("gene_name", [""])[0].strip(" ")
 
             endpoint5_1 = f"/lookup/symbol/homo_sapiens/{gene}"
@@ -181,11 +182,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     data = json.loads(response.read().decode())
                     gene_id = data["id"]
 
+                    response.close()
+                    connect.close()
+
                     endpoint5_2 = f"/sequence/id/{gene_id}"
+                    connect2 = http.client.HTTPConnection(SERVER)
 
                     try:
-                        connect.request("GET", endpoint5_2 + params)
-                        response2 = connect.getresponse()
+                        connect2.request("GET", endpoint5_2 + params)
+                        response2 = connect2.getresponse()
 
                         if response2.status != 200:
                             print(f"The sequence for gene '{gene}' (ID: {gene_id}) could not be retrieved.")
@@ -195,7 +200,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             data_seq = json.loads(response2.read().decode())
                             seq = data_seq['seq']
 
-                            contents = read_html_file("GeneSequence.html").render(gene_name=gene,gene_sequence=seq)
+                            response2.close()
+                            connect2.close()
+
+                            contents = read_html_file("GeneSequence.html").render(gene_name=gene, gene_sequence=seq)
 
                     except ConnectionRefusedError:
                         print('ERROR! Cannot connect to the server during step 2')
@@ -233,6 +241,119 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     chromosome_name = data["seq_region_name"]
 
                     contents = read_html_file("GeneInfo.html").render(gene_name=gene, start=gene_start, end=gene_end, length=gene_length, id=gene_id, chromo=chromosome_name)
+
+            except ConnectionRefusedError:
+                print('ERROR! Cannot connect to the server during step 1')
+                exit()
+
+
+        elif path == "/geneCalc":
+            self.send_response(200)
+
+            gene = arguments.get("gene_name", [""])[0].strip(" ")
+
+            endpoint7_1 = f"/lookup/symbol/homo_sapiens/{gene}"
+            connect = http.client.HTTPConnection(SERVER)
+
+            try:
+                connect.request("GET", endpoint7_1 + params)
+                response = connect.getresponse()
+
+                if response.status != 200:
+                    print(f"The gene '{gene}' was not found in the Ensembl database.")
+                    contents = read_html_file("error.html").render()
+
+                else:
+                    data = json.loads(response.read().decode())
+                    gene_id = data["id"]
+
+                    response.close()
+                    connect.close()
+
+                    endpoint7_2 = f"/sequence/id/{gene_id}"
+                    connect3 = http.client.HTTPConnection(SERVER)
+
+                    try:
+                        connect3.request("GET", endpoint7_2 + params)
+                        response3 = connect3.getresponse()
+
+                        if response3.status != 200:
+                            print(f"The sequence for gene '{gene}' (ID: {gene_id}) could not be retrieved.")
+                            contents = read_html_file("error.html").render()
+
+                        else:
+                            data_seq = json.loads(response3.read().decode())
+                            seq = data_seq['seq']
+
+                            seq_length = len(seq)
+
+                            base_count = {"A":0, "C":0, "G":0, "T":0}
+                            base_percentage = {"A":0, "C":0, "G":0, "T":0}
+
+                            for base in seq:
+                                if base == "A":
+                                    base_count["A"] += 1
+                                elif base == "C":
+                                    base_count["C"] += 1
+                                elif base == "G":
+                                    base_count["G"] += 1
+
+                                else:
+                                    base_count["T"] += 1
+
+                            base_percentage["A"] += round((base_count["A"] / seq_length) * 100, 2)
+                            base_percentage["C"] += round((base_count["C"] / seq_length) * 100, 2)
+                            base_percentage["G"] += round((base_count["G"] / seq_length) * 100, 2)
+                            base_percentage["T"] += round((base_count["T"] / seq_length) * 100, 2)
+
+                            final_base_percentage = ""
+                            for b, p in base_percentage.items():
+                                final_base_percentage += f"{b} --> {p}% <br> "
+
+                            response3.close()
+                            connect3.close()
+
+                            contents = read_html_file("GeneCalculations.html").render(gene_name=gene,gene_length=seq_length,base_count=final_base_percentage)
+
+                    except ConnectionRefusedError:
+                        print('ERROR! Cannot connect to the server during step 2')
+                        exit()
+
+            except ConnectionRefusedError:
+                print('ERROR! Cannot connect to the server during step 1')
+                exit()
+
+
+        elif path == "/geneList":
+            self.send_response(200)
+
+            chromosome = arguments.get("chromo", [""])[0].strip(" ")
+            start = arguments.get("start", [""])[0].strip(" ")
+            end = arguments.get("end", [""])[0].strip(" ")
+
+            endpoint8 = f"/overlap/region/homo_sapiens/{chromosome}:{start}-{end}"
+            params8 = "?feature=gene;content-type=application/json"
+
+            connect = http.client.HTTPConnection(SERVER)
+
+            try:
+                connect.request("GET", endpoint8 + params8)
+                response = connect.getresponse()
+
+                if response.status != 200:
+                    print(f"The chromosome '{chromosome}' was not found in the Ensembl database or the end and start points are not valid")
+                    contents = read_html_file("error.html").render()
+
+                else:
+                    data = json.loads(response.read().decode())
+
+                    gene_list = []
+
+                    for i in data:
+                        gene_name = i["external_name"]
+                        gene_list.append(gene_name)
+
+                    contents = read_html_file("GeneList.html").render(chromo=chromosome, start=start, end=end, gene_list=gene_list)
 
             except ConnectionRefusedError:
                 print('ERROR! Cannot connect to the server during step 1')

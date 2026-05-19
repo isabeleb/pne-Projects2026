@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>List of genes that overlap the region</title>
 </head>
-<body>
-
+<body style="background-color: lightblue;">
+<p>The chromosome you have selected is : {{chromo}} </p>
+<p>The start you have selected is : {{start}} </p>
+<p>The end you have selected is : {{end}} </p>
+<ul>
+    <li>{{ gene_list | join('</li><li>') }}</li>
+</ul>
+<b></b>
+[<a href="http://127.0.0.1:8080/">Main page</a>]
 </body>
 </html>
