@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Karyotype information of a specific species</title>
 </head>
-<body>
+<body style="background-color: lightblue;">
+<p>The species you have selected is : {{species}}</p>
+<p>The names of the chromosomes are : </p>
 
+<li>{{ karyo_info | join('</li><li>') }}</li>
+
+[<a href="http://127.0.0.1:8080/">Main page</a>]
+<b></b>
 </body>
 </html>
